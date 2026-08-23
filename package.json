@@ -1,10 +1,10 @@
 {
   "name": "html5-slot-machine",
-  "description": "Modern casino slot machine game using only plain JavaScript (Web Animations API)",
-  "version": "1.1.0",
+  "description": "Customized educational version of HTML5 Slot Machine, based on the original project by Johannes Kronmüller.",
+  "version": "1.0.0",
   "license": "MIT",
-  "author": "Johannes Kronmüller <hello@johakr.me> (https://johakr.me/)",
-  "repository": "johakr/html5-slot-machine",
+  "author": "StableCircuit",
+  "repository": "StableCircuit/html5-slot-machine",
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack serve --mode development",
