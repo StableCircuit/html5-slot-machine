@@ -2,7 +2,7 @@ body {
   width: 100vw;
   height: 100vh;
   padding: 1rem;
-  background-image: url(dbdfdc8f51630ddfbb3f.jpg);
+  background-image: url(14c704225e3af5b3f560.jpg);
   background-size: cover;
   display: flex;
   align-items: center;
@@ -12,8 +12,12 @@ body {
 
 @media only screen and (max-width: 1200px) {
   body {
-    background-image: url(01e008fb4d3f3df23e7d.jpg);
+    background-image: url(14c704225e3af5b3f560.jpg);
   }
+}
+
+#slot {
+  transform: translateY(20px);
 }
 
 #reels {
@@ -39,8 +43,7 @@ body {
   width: calc(100% + 6px);
   margin: -3px 0 0 -3px;
   height: auto;
-
-  /* enable gpu accelaration, fixes iOS flicker */
+  /* enable gpu acceleration, fixes iOS flicker */
   transform: translate3d(0, 0, 0);
 }
 
