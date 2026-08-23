@@ -110,3 +110,7 @@ Any third-party intellectual property remains subject to the rights, terms, cond
 Should this project ever be distributed publicly, published online for general access, incorporated into another product, or used for commercial purposes, the relevant copyright, trademark, publicity, licensing, privacy, and other intellectual-property requirements should be independently reviewed and any necessary permissions or licenses obtained before such use.
 
 This disclaimer is provided to document the intended purpose and context of the visual assets and does not purport to waive, limit, replace, or otherwise alter any rights or remedies available to the respective owners of third-party intellectual property.
+
+## Deployment
+
+This project is deployed using GitHub Actions and GitHub Pages.
