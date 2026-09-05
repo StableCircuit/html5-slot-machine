@@ -8,26 +8,91 @@
     />
   </head>
   <body>
-    <div id="slot">
-      <div id="jackpot" style="visibility: hidden">
-        Jackpot: <span id="jp">5.555.555</span>
+    <div id="game-layout">
+      <div id="side-left">
+        <div id="paytable" class="side-panel">
+          <h2>Paytable</h2>
+          <a
+            href="paytable.html"
+            target="_blank"
+            rel="noopener"
+            class="paytable-link"
+            >Check the Paytable!</a
+          >
+        </div>
+
+        <div id="donate" class="side-panel">
+          <h2>Support me!</h2>
+          <p class="donate-text">
+            Did you enjoy the game? Support me with a tip!
+          </p>
+
+          <a
+            href="bitcoin:YOUR-BITCOIN-ADDRESS-HERE"
+            class="donate-qr-link"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              class="donate-qr"
+              src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=bitcoin:YOUR-BITCOIN-ADDRESS-HERE"
+              alt="Bitcoin donation QR code"
+            />
+          </a>
+          <code class="donate-address">YOUR-BITCOIN-ADDRESS-HERE</code>
+        </div>
       </div>
 
-      <div id="reels">
-        <div class="reel"></div>
-        <div class="reel"></div>
-        <div class="reel"></div>
-        <div class="reel"></div>
-        <div class="reel"></div>
+      <div id="slot">
+        <div id="jackpot" style="visibility: hidden">
+          Jackpot: <span id="jp">5.555.555</span>
+        </div>
+
+        <div id="reels">
+          <div class="reel"></div>
+          <div class="reel"></div>
+          <div class="reel"></div>
+          <div class="reel"></div>
+          <div class="reel"></div>
+          <svg id="win-lines" viewBox="0 0 5 3" preserveAspectRatio="none">
+            <defs>
+              <filter
+                id="neon-blur"
+                x="-1"
+                y="-1"
+                width="7"
+                height="5"
+                filterUnits="userSpaceOnUse"
+              >
+                <feGaussianBlur stdDeviation="0.09" />
+              </filter>
+            </defs>
+            <g id="win-lines-content"></g>
+          </svg>
+        </div>
+
+        <div id="controls">
+          <button type="button" id="spin">SPIN</button>
+
+          <label>
+            <input type="checkbox" name="autoplay" id="autoplay" />
+            Autoplay
+          </label>
+        </div>
       </div>
 
-      <div id="controls">
-        <button type="button" id="spin">SPIN</button>
+      <div id="scoreboard" class="side-panel">
+        <h2>Score</h2>
 
-        <label>
-          <input type="checkbox" name="autoplay" id="autoplay" />
-          Autoplay
-        </label>
+        <div class="score-block">
+          <span class="score-label">Last spin</span>
+          <div id="score-last">0</div>
+        </div>
+
+        <div class="score-block">
+          <span class="score-label">Total</span>
+          <div id="score-total">0</div>
+        </div>
       </div>
     </div>
   </body>

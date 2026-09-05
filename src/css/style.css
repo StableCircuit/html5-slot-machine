@@ -1,3 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap");
+
+/* ============================================================
+   DESIGN TOKENS — ancient gold-and-stone theme
+   ============================================================ */
+:root {
+  --gold: #d9a635;
+  --gold-bright: #f5cf6b;
+  --gold-deep: #8a5a1a;
+  --stone-dark: #1c1108;
+  --stone-darker: #100a04;
+  --parchment: #f0dfb4;
+}
+
 body {
   width: 100vw;
   height: 100vh;
@@ -16,16 +30,223 @@ body {
   }
 }
 
+#game-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+}
+
+/* ============================================================
+   SIDE PANELS — carved stone tablets with a gold frame
+   ============================================================ */
+
+#side-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: translate(40px, -60px);
+}
+
+.side-panel {
+  box-sizing: border-box;
+  background: linear-gradient(
+    160deg,
+    var(--stone-dark) 0%,
+    var(--stone-darker) 100%
+  );
+  border: 2px solid var(--gold);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 207, 107, 0.25),
+    0 10px 30px rgba(0, 0, 0, 0.55);
+  padding: 14px 16px;
+  width: 190px;
+  flex-shrink: 0;
+  max-height: 90vh;
+  overflow-y: auto;
+  font-size: 14px;
+  color: var(--parchment);
+  text-align: center;
+}
+
+#scoreboard {
+  transform: translate(-40px, -60px);
+}
+
+.side-panel h2 {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 1px;
+  text-align: center;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  position: relative;
+  color: var(--gold);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.side-panel h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.paytable-link {
+  display: block;
+  font-family: "Cinzel", serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--stone-darker);
+  background: linear-gradient(
+    180deg,
+    var(--gold-bright),
+    var(--gold) 60%,
+    var(--gold-deep)
+  );
+  border: 1px solid var(--gold-deep);
+  border-radius: 6px;
+  padding: 10px 8px;
+  box-shadow:
+    0 3px 0 var(--gold-deep),
+    0 6px 14px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.paytable-link:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 0 var(--gold-deep),
+    0 8px 18px rgba(0, 0, 0, 0.45);
+  text-decoration: none;
+}
+
+.paytable-link:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 1px 0 var(--gold-deep),
+    0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.paytable-link:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+}
+
+/* Donate box */
+
+.donate-text {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--parchment);
+  margin: 0 0 10px 0;
+}
+
+.donate-qr-link {
+  display: block;
+  width: 100px;
+  margin: 0 auto 8px auto;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--gold-deep);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.donate-qr-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px 2px rgba(245, 207, 107, 0.4);
+}
+
+.donate-qr-link:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+}
+
+.donate-qr {
+  display: block;
+  width: 100px;
+  height: 100px;
+}
+
+.donate-address {
+  display: block;
+  font-size: 9px;
+  word-break: break-all;
+  color: var(--gold);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--gold-deep);
+  border-radius: 4px;
+  padding: 5px 6px;
+  user-select: all;
+}
+
+/* Score */
+
+.score-block {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.score-block:last-child {
+  margin-bottom: 0;
+}
+
+.score-label {
+  display: block;
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+#score-last,
+#score-total {
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--gold);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 12px rgba(245, 207, 107, 0.35);
+}
+
+/* ============================================================
+   SLOT + REELS
+   ============================================================ */
+
 #slot {
   transform: translateY(20px);
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 #reels {
+  position: relative;
   display: flex;
-  width: 100vw;
-  height: calc((3 / 5) * 100vw);
+  width: 100%;
+  aspect-ratio: 5 / 3;
   max-height: calc(90vh - 50px - 40px);
   max-width: calc((5 / 3) * (90vh - 50px - 40px));
+  margin: 0 auto;
 }
 
 .reel {
@@ -47,32 +268,277 @@ body {
   transform: translate3d(0, 0, 0);
 }
 
+/* ============================================================
+   NEON WIN LINES — SVG overlay drawn by Slot.js after each spin
+   ============================================================
+   The overlay sits on top of the reels (outside each .reel's own
+   overflow:hidden, since it's a sibling, not a child, of .reel),
+   so the glow is never clipped. viewBox is "0 0 5 3" -> 1 unit
+   per cell, so stroke-width/radius below are in "cell" units and
+   scale naturally with the reel size on any screen. */
+
+#win-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+.win-line {
+  animation: winLinePulse 0.9s ease-in-out infinite alternate;
+}
+
+/* Blurred wide stroke: this is what creates the smooth, gradual
+   fade from bright gold to transparent -- a real Gaussian blur,
+   not stacked flat-opacity layers, so there is no visible "step". */
+.win-line-glow {
+  /* stroke color is set inline by Slot.js, per the win's score */
+  stroke-width: 0.26;
+  stroke-linecap: round;
+  opacity: 0.85;
+  filter: url(#neon-blur);
+}
+
+/* Crisp, unblurred, near-white line on top: the "hot filament"
+   at the center of the tube. */
+.win-line-core {
+  stroke: #fffaf0;
+  stroke-width: 0.04;
+  stroke-linecap: round;
+  opacity: 0.95;
+}
+
+.win-line-node-glow {
+  /* fill color is set inline by Slot.js, per the win's score */
+  r: 0.16;
+  opacity: 0.85;
+  filter: url(#neon-blur);
+}
+
+.win-line-node-core {
+  r: 0.05;
+  fill: #fffaf0;
+  opacity: 0.95;
+}
+
+@keyframes winLinePulse {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   CONTROL BAR — dark plinth with gold trim
+   ============================================================ */
+
 #controls {
-  background-color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(180deg, #2a1c10, #140c05);
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
   height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 30px;
+  width: 100%;
+  max-width: calc((5 / 3) * (90vh - 50px - 40px));
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 #controls label {
   display: flex;
   align-items: center;
+  gap: 10px;
   margin: 0;
+  font-family: "Cinzel", serif;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: var(--parchment);
+  cursor: pointer;
+  transform: translateX(-50px);
 }
 
-#controls label input {
-  margin-right: 5px;
-}
+/* Autoplay toggle — custom sliding switch, no native checkbox look */
 
 input[type="checkbox"] {
-  width: 40px;
-  height: 40px;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 44px;
+  height: 24px;
+  margin: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3a2413, #1a0f06);
+  border: 1px solid var(--gold-deep);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    var(--gold-bright),
+    var(--gold-deep)
+  );
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  transition: transform 0.25s ease;
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(180deg, #6b4a1a, #3a2410);
+  border-color: var(--gold-bright);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+  background: radial-gradient(circle at 35% 30%, #fff2c4, var(--gold-bright));
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+}
+
+/* Spin button — rectangular gold bar, matching the paytable-link language */
+
+#spin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--gold-deep);
+  border-radius: 6px;
+  background: linear-gradient(
+    180deg,
+    var(--gold-bright),
+    var(--gold) 60%,
+    var(--gold-deep)
+  );
+  color: var(--stone-darker);
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 1;
+  transform: translateX(60px);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.3),
+    0 3px 0 var(--gold-deep),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+
+#spin::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  right: 6px;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent);
+  border-radius: 4px 4px 10px 10px;
+  pointer-events: none;
+}
+
+#spin::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 10px;
+  background: radial-gradient(
+    ellipse,
+    rgba(245, 207, 107, 0.35),
+    transparent 70%
+  );
+  z-index: -1;
+  animation: spinGlow 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes spinGlow {
+  from {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+#spin:hover:not(:disabled) {
+  transform: translateX(60px) translateY(-1px);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.55),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.3),
+    0 4px 0 var(--gold-deep),
+    0 0 16px 3px rgba(245, 207, 107, 0.55),
+    0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+#spin:active:not(:disabled) {
+  transform: translateX(60px) translateY(2px);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+    0 1px 0 var(--gold-deep),
+    0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+#spin:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#spin:disabled::after {
+  animation: none;
+  opacity: 0.15;
+}
+
+#spin:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #spin,
+  #spin::after,
+  .paytable-link,
+  .donate-qr-link,
+  .win-line,
+  input[type="checkbox"],
+  input[type="checkbox"]::before {
+    transition: none;
+    animation: none;
+  }
 }
 
 #jackpot {
-  color: #d5ad6d;
+  color: var(--gold);
   font-size: 40px;
   text-align: center;
 }
