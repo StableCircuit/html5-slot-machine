@@ -34,11 +34,11 @@ export default class Score {
           let runScore = 0;
 
           if (length >= 5) {
-            runScore = type === "horizontal" ? 1000 : 300;
+            runScore = 1000;
           } else if (length === 4) {
-            runScore = 80;
+            runScore = 160;
           } else if (length === 3) {
-            runScore = 20;
+            runScore = 60;
           }
 
           if (runScore > 0) {
@@ -188,18 +188,18 @@ export default class Score {
      */
 
     const exactThreeCombinations = [
-      { symbols: ["z1", "z2", "z19"], score: 30 },
-      { symbols: ["z19", "z39", "z40"], score: 40 },
-      { symbols: ["z19", "z15", "z10"], score: 35 },
-      { symbols: ["z19", "z21", "z36"], score: 45 },
-      { symbols: ["z19", "z31", "z36"], score: 50 },
-      { symbols: ["z18", "z36", "z31"], score: 50 },
-      { symbols: ["z18", "z36", "z21"], score: 45 },
-      { symbols: ["z17", "z36", "z31"], score: 50 },
-      { symbols: ["z17", "z36", "z21"], score: 45 },
-      { symbols: ["z3", "z4", "z5"], score: 3 },
-      { symbols: ["z17", "z19", "z12"], score: 3 },
-      { symbols: ["z17", "z19", "z14"], score: 5 },
+      { symbols: ["z1", "z2", "z19"], score: 80 },
+      { symbols: ["z19", "z39", "z40"], score: 100 },
+      { symbols: ["z19", "z15", "z10"], score: 90 },
+      { symbols: ["z19", "z21", "z36"], score: 110 },
+      { symbols: ["z19", "z31", "z36"], score: 120 },
+      { symbols: ["z18", "z36", "z31"], score: 120 },
+      { symbols: ["z18", "z36", "z21"], score: 110 },
+      { symbols: ["z17", "z36", "z31"], score: 120 },
+      { symbols: ["z17", "z36", "z21"], score: 110 },
+      { symbols: ["z3", "z4", "z5"], score: 15 },
+      { symbols: ["z17", "z19", "z12"], score: 15 },
+      { symbols: ["z17", "z19", "z14"], score: 20 },
     ];
 
     const z18Allowed = ["z18", "z16", "z23", "z28", "z29", "z30", "z34"];
@@ -264,7 +264,7 @@ export default class Score {
             containsOnly(segment, z18Allowed) &&
             hasNoDuplicates(segment)
           ) {
-            const points = length === 3 ? 10 : length === 4 ? 20 : 30;
+            const points = length === 3 ? 35 : length === 4 ? 60 : 80;
             score += points;
             recordWin(segmentCoordinates, points);
             found = true;
@@ -297,7 +297,7 @@ export default class Score {
             containsOnly(segment, z17Allowed) &&
             hasNoDuplicates(segment)
           ) {
-            const points = length === 3 ? 10 : length === 4 ? 20 : 30;
+            const points = length === 3 ? 35 : length === 4 ? 60 : 80;
             score += points;
             recordWin(segmentCoordinates, points);
             found = true;

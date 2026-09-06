@@ -6,28 +6,22 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 
 /*
  * Score -> hue mapping, ordered by score: cold cyan for small
- * wins, hot red for the big ones.
- *
- * Note: the 300 entry is never used. A score of 300 requires 5
- * identical symbols on a NON-horizontal line, but columns are 3
- * cells tall and diagonals are at most 3 cells long, so no such
- * line exists on a 5x3 grid. The entry is kept only for
- * reference, in case the grid is ever enlarged.
+ * wins, hot red for the big ones. One entry per payout the game
+ * can actually produce.
  */
 const WIN_SCORE_HUES = {
-  3: 190,
-  5: 203,
-  10: 216,
-  20: 229,
-  30: 242,
-  35: 255,
-  40: 268,
-  45: 281,
-  50: 294,
-  69: 307,
-  80: 320,
-  300: 333,
-  666: 346,
+  15: 190,
+  20: 204,
+  35: 218,
+  60: 232,
+  69: 246,
+  80: 261,
+  90: 275,
+  100: 289,
+  110: 303,
+  120: 317,
+  160: 331,
+  666: 345,
   1000: 359,
 };
 
@@ -87,208 +81,123 @@ export default class Slot {
    * WINNING EVENTS
    * ============================================================
    *
-   * FREQUENCIES — the min/max pairs are not hand-picked. They are
-   * derived from
+   * FREQUENCIES — the min/max pairs are derived, not hand-picked.
+   * A payout worth N points shows up roughly once every
    *
-   *     N = 4.2 * score^0.72
+   *     0.38 * N * (number of events paying that same amount)
    *
-   * then widened by 15% either way to add variety. The result is
-   * that a combination worth more points always shows up less
-   * often, with no exceptions.
+   * spins, then widened by 15% either way for variety. The
+   * multiplier matters: several different combinations pay 110,
+   * for instance, so each of them must be correspondingly rarer
+   * or the value 110 would appear three times too often.
    *
-   * The nine "69" pairs are the only special case: their N is
-   * multiplied by 9, because the paytable lists them as a single
-   * entry while the engine treats them as nine separate events.
-   * Without that factor, "Lucky 69" would appear nine times more
-   * often than intended.
+   * The result is that a payout worth more points always shows up
+   * less often, with no exceptions.
    */
 
   getWinningEvents() {
     return [
       {
-        name: "classic-triple",
-        min: 31,
-        max: 42,
+        name: "z17-z19-z14",
+        min: 6,
+        max: 9,
         score: 20,
-        type: "classic",
-        length: 3,
-      },
-
-      {
-        name: "classic-quadruple",
-        min: 84,
-        max: 113,
-        score: 80,
-        type: "classic",
-        length: 4,
-      },
-
-      {
-        name: "classic-horizontal-quintuple",
-        min: 516,
-        max: 698,
-        score: 1000,
-        type: "classic-horizontal",
-        length: 5,
-      },
-
-      {
-        name: "z1-z2-z19",
-        min: 41,
-        max: 56,
-        score: 30,
         type: "exact-special",
-        symbols: ["z1", "z2", "z19"],
-      },
-
-      {
-        name: "z19-z39-z40",
-        min: 51,
-        max: 69,
-        score: 40,
-        type: "exact-special",
-        symbols: ["z19", "z39", "z40"],
-      },
-
-      {
-        name: "z19-z15-z10",
-        min: 46,
-        max: 62,
-        score: 35,
-        type: "exact-special",
-        symbols: ["z19", "z15", "z10"],
-      },
-
-      {
-        name: "z19-z21-z36",
-        min: 55,
-        max: 75,
-        score: 45,
-        type: "exact-special",
-        symbols: ["z19", "z21", "z36"],
-      },
-
-      {
-        name: "z19-z31-z36",
-        min: 60,
-        max: 81,
-        score: 50,
-        type: "exact-special",
-        symbols: ["z19", "z31", "z36"],
-      },
-
-      {
-        name: "z18-z36-z31",
-        min: 60,
-        max: 81,
-        score: 50,
-        type: "exact-special",
-        symbols: ["z18", "z36", "z31"],
-      },
-
-      {
-        name: "z18-z36-z21",
-        min: 55,
-        max: 75,
-        score: 45,
-        type: "exact-special",
-        symbols: ["z18", "z36", "z21"],
-      },
-
-      {
-        name: "z17-z36-z31",
-        min: 60,
-        max: 81,
-        score: 50,
-        type: "exact-special",
-        symbols: ["z17", "z36", "z31"],
-      },
-
-      {
-        name: "z17-z36-z21",
-        min: 55,
-        max: 75,
-        score: 45,
-        type: "exact-special",
-        symbols: ["z17", "z36", "z21"],
+        symbols: ["z17", "z19", "z14"],
       },
 
       {
         name: "z3-z4-z5",
-        min: 8,
-        max: 11,
-        score: 3,
+        min: 10,
+        max: 13,
+        score: 15,
         type: "exact-special",
         symbols: ["z3", "z4", "z5"],
       },
 
       {
         name: "z17-z19-z12",
-        min: 8,
-        max: 11,
-        score: 3,
+        min: 10,
+        max: 13,
+        score: 15,
         type: "exact-special",
         symbols: ["z17", "z19", "z12"],
       },
 
       {
-        name: "z17-z19-z14",
-        min: 11,
-        max: 15,
-        score: 5,
-        type: "exact-special",
-        symbols: ["z17", "z19", "z14"],
-      },
-
-      {
         name: "z18-family-3",
-        min: 19,
-        max: 25,
-        score: 10,
+        min: 23,
+        max: 31,
+        score: 35,
         type: "family",
         anchor: "z18",
         allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
+        length: 3,
+      },
+
+      {
+        name: "z17-family-3",
+        min: 23,
+        max: 31,
+        score: 35,
+        type: "family",
+        anchor: "z17",
+        allowed: ["z12", "z14", "z21", "z31"],
+        length: 3,
+      },
+
+      {
+        name: "z19-z15-z10",
+        min: 29,
+        max: 39,
+        score: 90,
+        type: "exact-special",
+        symbols: ["z19", "z15", "z10"],
+      },
+
+      {
+        name: "z19-z39-z40",
+        min: 32,
+        max: 44,
+        score: 100,
+        type: "exact-special",
+        symbols: ["z19", "z39", "z40"],
+      },
+
+      {
+        name: "classic-quadruple",
+        min: 52,
+        max: 70,
+        score: 160,
+        type: "classic",
+        length: 4,
+      },
+
+      {
+        name: "classic-triple",
+        min: 58,
+        max: 79,
+        score: 60,
+        type: "classic",
         length: 3,
       },
 
       {
         name: "z18-family-4",
-        min: 31,
-        max: 42,
-        score: 20,
+        min: 58,
+        max: 79,
+        score: 60,
         type: "family",
         anchor: "z18",
         allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
         length: 4,
-      },
-
-      {
-        name: "z18-family-5",
-        min: 41,
-        max: 56,
-        score: 30,
-        type: "family",
-        anchor: "z18",
-        allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
-        length: 5,
-      },
-
-      {
-        name: "z17-family-3",
-        min: 19,
-        max: 25,
-        score: 10,
-        type: "family",
-        anchor: "z17",
-        allowed: ["z12", "z14", "z21", "z31"],
-        length: 3,
       },
 
       {
         name: "z17-family-4",
-        min: 31,
-        max: 42,
-        score: 20,
+        min: 58,
+        max: 79,
+        score: 60,
         type: "family",
         anchor: "z17",
         allowed: ["z12", "z14", "z21", "z31"],
@@ -296,10 +205,30 @@ export default class Slot {
       },
 
       {
+        name: "z1-z2-z19",
+        min: 78,
+        max: 105,
+        score: 80,
+        type: "exact-special",
+        symbols: ["z1", "z2", "z19"],
+      },
+
+      {
+        name: "z18-family-5",
+        min: 78,
+        max: 105,
+        score: 80,
+        type: "family",
+        anchor: "z18",
+        allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
+        length: 5,
+      },
+
+      {
         name: "z17-family-5",
-        min: 41,
-        max: 56,
-        score: 30,
+        min: 78,
+        max: 105,
+        score: 80,
         type: "family",
         anchor: "z17",
         allowed: ["z12", "z14", "z21", "z31"],
@@ -307,18 +236,63 @@ export default class Slot {
       },
 
       {
-        name: "special-666",
-        min: 385,
-        max: 521,
-        score: 666,
+        name: "z17-z36-z21",
+        min: 107,
+        max: 144,
+        score: 110,
         type: "exact-special",
-        symbols: ["z17", "z18", "z19", "z20", "z22"],
+        symbols: ["z17", "z36", "z21"],
+      },
+
+      {
+        name: "z18-z36-z21",
+        min: 107,
+        max: 144,
+        score: 110,
+        type: "exact-special",
+        symbols: ["z18", "z36", "z21"],
+      },
+
+      {
+        name: "z19-z21-z36",
+        min: 107,
+        max: 144,
+        score: 110,
+        type: "exact-special",
+        symbols: ["z19", "z21", "z36"],
+      },
+
+      {
+        name: "z17-z36-z31",
+        min: 116,
+        max: 157,
+        score: 120,
+        type: "exact-special",
+        symbols: ["z17", "z36", "z31"],
+      },
+
+      {
+        name: "z18-z36-z31",
+        min: 116,
+        max: 157,
+        score: 120,
+        type: "exact-special",
+        symbols: ["z18", "z36", "z31"],
+      },
+
+      {
+        name: "z19-z31-z36",
+        min: 116,
+        max: 157,
+        score: 120,
+        type: "exact-special",
+        symbols: ["z19", "z31", "z36"],
       },
 
       {
         name: "z1-z19-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z1", "z19"],
@@ -326,8 +300,8 @@ export default class Slot {
 
       {
         name: "z2-z19-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z2", "z19"],
@@ -335,8 +309,8 @@ export default class Slot {
 
       {
         name: "z10-z19-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z10", "z19"],
@@ -344,8 +318,8 @@ export default class Slot {
 
       {
         name: "z39-z19-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z39", "z19"],
@@ -353,8 +327,8 @@ export default class Slot {
 
       {
         name: "z40-z19-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z40", "z19"],
@@ -362,8 +336,8 @@ export default class Slot {
 
       {
         name: "z17-z31-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z17", "z31"],
@@ -371,8 +345,8 @@ export default class Slot {
 
       {
         name: "z18-z15-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z18", "z15"],
@@ -380,8 +354,8 @@ export default class Slot {
 
       {
         name: "z19-z21-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z19", "z21"],
@@ -389,11 +363,29 @@ export default class Slot {
 
       {
         name: "z17-z22-69",
-        min: 677,
-        max: 917,
+        min: 201,
+        max: 271,
         score: 69,
         type: "pair-69",
         symbols: ["z17", "z22"],
+      },
+
+      {
+        name: "special-666",
+        min: 215,
+        max: 291,
+        score: 666,
+        type: "exact-special",
+        symbols: ["z17", "z18", "z19", "z20", "z22"],
+      },
+
+      {
+        name: "classic-horizontal-quintuple",
+        min: 323,
+        max: 437,
+        score: 1000,
+        type: "classic-horizontal",
+        length: 5,
       },
     ];
   }
@@ -586,9 +578,8 @@ export default class Slot {
 
   createFamilyEvent(grid, event) {
     /*
-     * The length is no longer random: each family event has a
-     * fixed length (3, 4 or 5) and therefore a known score, so
-     * each of the three variants can be tuned separately.
+     * The length is fixed per event (3, 4 or 5), so each variant
+     * has a known payout and can be tuned separately.
      */
 
     const length = event.length;
