@@ -25,7 +25,7 @@ const config = {
   },
 };
 
-const slot = new Slot(document.getElementById("slot"), config);
+new Slot(document.getElementById("slot"), config);
 
 // Testing only: expose Score in the browser console.
 window.Score = Score;

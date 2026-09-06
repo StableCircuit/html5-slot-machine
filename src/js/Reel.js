@@ -26,12 +26,12 @@ export default class Reel {
       {
         duration: this.factor * 1000,
         easing: "ease-in-out",
-      }
+      },
     );
     this.animation.cancel();
 
     initialSymbols.forEach((symbol) =>
-      this.symbolContainer.appendChild(new Symbol(symbol).img)
+      this.symbolContainer.appendChild(new Symbol(symbol).img),
     );
   }
 
@@ -46,7 +46,7 @@ export default class Reel {
       const icon = new Symbol(
         i >= 10 * Math.floor(this.factor) - 2
           ? nextSymbols[i - Math.floor(this.factor) * 10]
-          : undefined
+          : undefined,
       );
       fragment.appendChild(icon.img);
     }
@@ -55,17 +55,21 @@ export default class Reel {
   }
 
   spin() {
+    let timeoutId;
+
     const animationPromise = new Promise(
-      (resolve) => (this.animation.onfinish = resolve)
+      (resolve) => (this.animation.onfinish = resolve),
     );
-    const timeoutPromise = new Promise((resolve) =>
-      setTimeout(resolve, this.factor * 1000)
-    );
+    const timeoutPromise = new Promise((resolve) => {
+      timeoutId = setTimeout(resolve, this.factor * 1000);
+    });
 
     this.animation.cancel();
     this.animation.play();
 
     return Promise.race([animationPromise, timeoutPromise]).then(() => {
+      clearTimeout(timeoutId);
+
       if (this.animation.playState !== "finished") this.animation.finish();
 
       const max = this.symbolContainer.children.length - 3;

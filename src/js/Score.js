@@ -13,7 +13,7 @@ export default class Score {
 
     /*
      * ============================================================
-     * PUNTEGGI DELLE LINEE CLASSICHE
+     * PLAIN RUNS OF IDENTICAL SYMBOLS
      * ============================================================
      */
 
@@ -55,13 +55,13 @@ export default class Score {
 
     /*
      * ============================================================
-     * ESTRAZIONE DELLE LINEE (simboli + coordinate, in ordine)
+     * LINE EXTRACTION (symbols + coordinates, in order)
      * ============================================================
      */
 
     const lines = [];
 
-    // Orizzontali
+    // Horizontal
     for (let row = 0; row < 3; row++) {
       const line = [];
       const coordinates = [];
@@ -78,7 +78,7 @@ export default class Score {
       });
     }
 
-    // Verticali
+    // Vertical
     for (let column = 0; column < 5; column++) {
       const line = [grid[column][0], grid[column][1], grid[column][2]];
       const coordinates = [
@@ -94,7 +94,7 @@ export default class Score {
       });
     }
 
-    // Diagonali discendenti
+    // Descending diagonals
     for (let startColumn = 0; startColumn < 5; startColumn++) {
       const line = [];
       const coordinates = [];
@@ -118,7 +118,7 @@ export default class Score {
       }
     }
 
-    // Diagonali ascendenti
+    // Ascending diagonals
     for (let startColumn = 0; startColumn < 5; startColumn++) {
       const line = [];
       const coordinates = [];
@@ -144,7 +144,7 @@ export default class Score {
 
     /*
      * ============================================================
-     * COMBINAZIONI CLASSICHE
+     * SCORING THE PLAIN RUNS
      * ============================================================
      */
 
@@ -154,7 +154,7 @@ export default class Score {
 
     /*
      * ============================================================
-     * UTILITÀ PER LE COMBINAZIONI SPECIALI
+     * HELPERS FOR THE SPECIAL COMBINATIONS
      * ============================================================
      */
 
@@ -183,7 +183,7 @@ export default class Score {
 
     /*
      * ============================================================
-     * COMBINAZIONI SPECIALI ESATTE DA 3 SIMBOLI
+     * EXACT THREE-SYMBOL SPECIAL COMBINATIONS
      * ============================================================
      */
 
@@ -221,7 +221,7 @@ export default class Score {
 
     /*
      * ============================================================
-     * VALUTAZIONE DELLE COMBINAZIONI SPECIALI
+     * EVALUATING THE SPECIAL COMBINATIONS
      * ============================================================
      */
 
@@ -229,22 +229,22 @@ export default class Score {
       const symbolsInLine = line.symbols;
       const coordinatesInLine = line.coordinates;
 
-      // Combinazioni esatte da 3
+      // Exact three-symbol combinations
       if (symbolsInLine.length >= 3) {
         for (let start = 0; start <= symbolsInLine.length - 3; start++) {
-          const window = symbolsInLine.slice(start, start + 3);
-          const windowCoordinates = coordinatesInLine.slice(start, start + 3);
+          const segment = symbolsInLine.slice(start, start + 3);
+          const segmentCoordinates = coordinatesInLine.slice(start, start + 3);
 
           for (const combination of exactThreeCombinations) {
-            if (sameSymbols(window, combination.symbols)) {
+            if (sameSymbols(segment, combination.symbols)) {
               score += combination.score;
-              recordWin(windowCoordinates, combination.score);
+              recordWin(segmentCoordinates, combination.score);
             }
           }
         }
       }
 
-      // Gruppo z18: 3 / 4 / 5
+      // z18 group: 3 / 4 / 5
       for (let length = 5; length >= 3; length--) {
         if (symbolsInLine.length < length) {
           continue;
@@ -253,20 +253,20 @@ export default class Score {
         let found = false;
 
         for (let start = 0; start <= symbolsInLine.length - length; start++) {
-          const window = symbolsInLine.slice(start, start + length);
-          const windowCoordinates = coordinatesInLine.slice(
+          const segment = symbolsInLine.slice(start, start + length);
+          const segmentCoordinates = coordinatesInLine.slice(
             start,
             start + length,
           );
 
           if (
-            containsRequired(window, ["z18"]) &&
-            containsOnly(window, z18Allowed) &&
-            hasNoDuplicates(window)
+            containsRequired(segment, ["z18"]) &&
+            containsOnly(segment, z18Allowed) &&
+            hasNoDuplicates(segment)
           ) {
             const points = length === 3 ? 10 : length === 4 ? 20 : 30;
             score += points;
-            recordWin(windowCoordinates, points);
+            recordWin(segmentCoordinates, points);
             found = true;
             break;
           }
@@ -277,7 +277,7 @@ export default class Score {
         }
       }
 
-      // Gruppo z17: 3 / 4 / 5
+      // z17 group: 3 / 4 / 5
       for (let length = 5; length >= 3; length--) {
         if (symbolsInLine.length < length) {
           continue;
@@ -286,20 +286,20 @@ export default class Score {
         let found = false;
 
         for (let start = 0; start <= symbolsInLine.length - length; start++) {
-          const window = symbolsInLine.slice(start, start + length);
-          const windowCoordinates = coordinatesInLine.slice(
+          const segment = symbolsInLine.slice(start, start + length);
+          const segmentCoordinates = coordinatesInLine.slice(
             start,
             start + length,
           );
 
           if (
-            containsRequired(window, ["z17"]) &&
-            containsOnly(window, z17Allowed) &&
-            hasNoDuplicates(window)
+            containsRequired(segment, ["z17"]) &&
+            containsOnly(segment, z17Allowed) &&
+            hasNoDuplicates(segment)
           ) {
             const points = length === 3 ? 10 : length === 4 ? 20 : 30;
             score += points;
-            recordWin(windowCoordinates, points);
+            recordWin(segmentCoordinates, points);
             found = true;
             break;
           }
@@ -310,34 +310,34 @@ export default class Score {
         }
       }
 
-      // Cinquine da 69
+      // Lucky 69: a full five-cell row of just two symbols
       if (symbolsInLine.length >= 5) {
         for (let start = 0; start <= symbolsInLine.length - 5; start++) {
-          const window = symbolsInLine.slice(start, start + 5);
-          const windowCoordinates = coordinatesInLine.slice(start, start + 5);
+          const segment = symbolsInLine.slice(start, start + 5);
+          const segmentCoordinates = coordinatesInLine.slice(start, start + 5);
 
           for (const pair of special69Pairs) {
             if (
-              containsOnly(window, pair) &&
-              window.includes(pair[0]) &&
-              window.includes(pair[1])
+              containsOnly(segment, pair) &&
+              segment.includes(pair[0]) &&
+              segment.includes(pair[1])
             ) {
               score += 69;
-              recordWin(windowCoordinates, 69);
+              recordWin(segmentCoordinates, 69);
             }
           }
         }
       }
 
-      // Cinquina da 666
+      // The 666: a full five-cell row with one exact symbol set
       if (symbolsInLine.length >= 5) {
         for (let start = 0; start <= symbolsInLine.length - 5; start++) {
-          const window = symbolsInLine.slice(start, start + 5);
-          const windowCoordinates = coordinatesInLine.slice(start, start + 5);
+          const segment = symbolsInLine.slice(start, start + 5);
+          const segmentCoordinates = coordinatesInLine.slice(start, start + 5);
 
-          if (sameSymbols(window, special666)) {
+          if (sameSymbols(segment, special666)) {
             score += 666;
-            recordWin(windowCoordinates, 666);
+            recordWin(segmentCoordinates, 666);
           }
         }
       }

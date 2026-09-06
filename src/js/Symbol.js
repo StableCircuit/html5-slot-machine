@@ -1,5 +1,15 @@
 const cache = {};
 
+/*
+ * Built once at module load instead of on every access. The old
+ * version rebuilt a 40-item array inside the getter, and random()
+ * hit that getter twice per call, so a spin that probes thousands
+ * of candidate grids was allocating millions of throwaway arrays.
+ */
+const SYMBOL_NAMES = Object.freeze(
+  Array.from({ length: 40 }, (_, index) => `z${index + 1}`),
+);
+
 export default class Symbol {
   constructor(name = Symbol.random()) {
     this.name = name;
@@ -19,10 +29,10 @@ export default class Symbol {
   }
 
   static get symbols() {
-    return Array.from({ length: 40 }, (_, index) => `z${index + 1}`);
+    return SYMBOL_NAMES;
   }
 
   static random() {
-    return this.symbols[Math.floor(Math.random() * this.symbols.length)];
+    return SYMBOL_NAMES[Math.floor(Math.random() * SYMBOL_NAMES.length)];
   }
 }

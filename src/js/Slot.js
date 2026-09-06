@@ -5,10 +5,14 @@ import Score from "./Score.js";
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 /*
- * Mappa punteggio -> tonalità (hue), in ordine crescente di
- * punteggio: dal ciano freddo (punteggi piccoli) al rosso acceso
- * (punteggi enormi). Elenco esaustivo dei 14 punteggi possibili
- * generati da Score.js.
+ * Score -> hue mapping, ordered by score: cold cyan for small
+ * wins, hot red for the big ones.
+ *
+ * Note: the 300 entry is never used. A score of 300 requires 5
+ * identical symbols on a NON-horizontal line, but columns are 3
+ * cells tall and diagonals are at most 3 cells long, so no such
+ * line exists on a 5x3 grid. The entry is kept only for
+ * reference, in case the grid is ever enlarged.
  */
 const WIN_SCORE_HUES = {
   3: 190,
@@ -80,16 +84,31 @@ export default class Slot {
 
   /*
    * ============================================================
-   * GENERAZIONE DELLE COMBINAZIONI VINCENTI
+   * WINNING EVENTS
    * ============================================================
+   *
+   * FREQUENCIES — the min/max pairs are not hand-picked. They are
+   * derived from
+   *
+   *     N = 4.2 * score^0.72
+   *
+   * then widened by 15% either way to add variety. The result is
+   * that a combination worth more points always shows up less
+   * often, with no exceptions.
+   *
+   * The nine "69" pairs are the only special case: their N is
+   * multiplied by 9, because the paytable lists them as a single
+   * entry while the engine treats them as nine separate events.
+   * Without that factor, "Lucky 69" would appear nine times more
+   * often than intended.
    */
 
   getWinningEvents() {
     return [
       {
         name: "classic-triple",
-        min: 15,
-        max: 20,
+        min: 31,
+        max: 42,
         score: 20,
         type: "classic",
         length: 3,
@@ -97,26 +116,17 @@ export default class Slot {
 
       {
         name: "classic-quadruple",
-        min: 25,
-        max: 30,
+        min: 84,
+        max: 113,
         score: 80,
         type: "classic",
         length: 4,
       },
 
       {
-        name: "classic-quintuple",
-        min: 35,
-        max: 40,
-        score: 300,
-        type: "classic",
-        length: 5,
-      },
-
-      {
         name: "classic-horizontal-quintuple",
-        min: 60,
-        max: 70,
+        min: 516,
+        max: 698,
         score: 1000,
         type: "classic-horizontal",
         length: 5,
@@ -124,8 +134,8 @@ export default class Slot {
 
       {
         name: "z1-z2-z19",
-        min: 50,
-        max: 60,
+        min: 41,
+        max: 56,
         score: 30,
         type: "exact-special",
         symbols: ["z1", "z2", "z19"],
@@ -133,8 +143,8 @@ export default class Slot {
 
       {
         name: "z19-z39-z40",
-        min: 60,
-        max: 70,
+        min: 51,
+        max: 69,
         score: 40,
         type: "exact-special",
         symbols: ["z19", "z39", "z40"],
@@ -142,8 +152,8 @@ export default class Slot {
 
       {
         name: "z19-z15-z10",
-        min: 55,
-        max: 65,
+        min: 46,
+        max: 62,
         score: 35,
         type: "exact-special",
         symbols: ["z19", "z15", "z10"],
@@ -151,7 +161,7 @@ export default class Slot {
 
       {
         name: "z19-z21-z36",
-        min: 65,
+        min: 55,
         max: 75,
         score: 45,
         type: "exact-special",
@@ -160,8 +170,8 @@ export default class Slot {
 
       {
         name: "z19-z31-z36",
-        min: 70,
-        max: 80,
+        min: 60,
+        max: 81,
         score: 50,
         type: "exact-special",
         symbols: ["z19", "z31", "z36"],
@@ -169,8 +179,8 @@ export default class Slot {
 
       {
         name: "z18-z36-z31",
-        min: 70,
-        max: 80,
+        min: 60,
+        max: 81,
         score: 50,
         type: "exact-special",
         symbols: ["z18", "z36", "z31"],
@@ -178,7 +188,7 @@ export default class Slot {
 
       {
         name: "z18-z36-z21",
-        min: 65,
+        min: 55,
         max: 75,
         score: 45,
         type: "exact-special",
@@ -187,8 +197,8 @@ export default class Slot {
 
       {
         name: "z17-z36-z31",
-        min: 70,
-        max: 80,
+        min: 60,
+        max: 81,
         score: 50,
         type: "exact-special",
         symbols: ["z17", "z36", "z31"],
@@ -196,7 +206,7 @@ export default class Slot {
 
       {
         name: "z17-z36-z21",
-        min: 65,
+        min: 55,
         max: 75,
         score: 45,
         type: "exact-special",
@@ -204,47 +214,18 @@ export default class Slot {
       },
 
       {
-        name: "z18-family",
-        min: 10,
-        max: 30,
-        score: null,
-        type: "family",
-        anchor: "z18",
-        allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
-      },
-
-      {
         name: "z3-z4-z5",
-        min: 15,
-        max: 25,
+        min: 8,
+        max: 11,
         score: 3,
         type: "exact-special",
         symbols: ["z3", "z4", "z5"],
       },
 
       {
-        name: "special-666",
-        min: 100,
-        max: 110,
-        score: 666,
-        type: "exact-special",
-        symbols: ["z17", "z18", "z19", "z20", "z22"],
-      },
-
-      {
-        name: "z17-family",
-        min: 10,
-        max: 30,
-        score: null,
-        type: "family",
-        anchor: "z17",
-        allowed: ["z12", "z14", "z21", "z31"],
-      },
-
-      {
         name: "z17-z19-z12",
-        min: 15,
-        max: 25,
+        min: 8,
+        max: 11,
         score: 3,
         type: "exact-special",
         symbols: ["z17", "z19", "z12"],
@@ -252,17 +233,92 @@ export default class Slot {
 
       {
         name: "z17-z19-z14",
-        min: 15,
-        max: 25,
+        min: 11,
+        max: 15,
         score: 5,
         type: "exact-special",
         symbols: ["z17", "z19", "z14"],
       },
 
       {
+        name: "z18-family-3",
+        min: 19,
+        max: 25,
+        score: 10,
+        type: "family",
+        anchor: "z18",
+        allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
+        length: 3,
+      },
+
+      {
+        name: "z18-family-4",
+        min: 31,
+        max: 42,
+        score: 20,
+        type: "family",
+        anchor: "z18",
+        allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
+        length: 4,
+      },
+
+      {
+        name: "z18-family-5",
+        min: 41,
+        max: 56,
+        score: 30,
+        type: "family",
+        anchor: "z18",
+        allowed: ["z16", "z23", "z28", "z29", "z30", "z34"],
+        length: 5,
+      },
+
+      {
+        name: "z17-family-3",
+        min: 19,
+        max: 25,
+        score: 10,
+        type: "family",
+        anchor: "z17",
+        allowed: ["z12", "z14", "z21", "z31"],
+        length: 3,
+      },
+
+      {
+        name: "z17-family-4",
+        min: 31,
+        max: 42,
+        score: 20,
+        type: "family",
+        anchor: "z17",
+        allowed: ["z12", "z14", "z21", "z31"],
+        length: 4,
+      },
+
+      {
+        name: "z17-family-5",
+        min: 41,
+        max: 56,
+        score: 30,
+        type: "family",
+        anchor: "z17",
+        allowed: ["z12", "z14", "z21", "z31"],
+        length: 5,
+      },
+
+      {
+        name: "special-666",
+        min: 385,
+        max: 521,
+        score: 666,
+        type: "exact-special",
+        symbols: ["z17", "z18", "z19", "z20", "z22"],
+      },
+
+      {
         name: "z1-z19-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z1", "z19"],
@@ -270,8 +326,8 @@ export default class Slot {
 
       {
         name: "z2-z19-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z2", "z19"],
@@ -279,8 +335,8 @@ export default class Slot {
 
       {
         name: "z10-z19-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z10", "z19"],
@@ -288,8 +344,8 @@ export default class Slot {
 
       {
         name: "z39-z19-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z39", "z19"],
@@ -297,8 +353,8 @@ export default class Slot {
 
       {
         name: "z40-z19-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z40", "z19"],
@@ -306,8 +362,8 @@ export default class Slot {
 
       {
         name: "z17-z31-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z17", "z31"],
@@ -315,8 +371,8 @@ export default class Slot {
 
       {
         name: "z18-z15-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z18", "z15"],
@@ -324,8 +380,8 @@ export default class Slot {
 
       {
         name: "z19-z21-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z19", "z21"],
@@ -333,8 +389,8 @@ export default class Slot {
 
       {
         name: "z17-z22-69",
-        min: 100,
-        max: 110,
+        min: 677,
+        max: 917,
         score: 69,
         type: "pair-69",
         symbols: ["z17", "z22"],
@@ -360,14 +416,14 @@ export default class Slot {
 
   /*
    * ============================================================
-   * LINEE POSSIBILI
+   * AVAILABLE LINES
    * ============================================================
    */
 
   getLines() {
     const lines = [];
 
-    // Orizzontali
+    // Horizontal
     for (let row = 0; row < 3; row++) {
       const coordinates = [];
 
@@ -381,7 +437,7 @@ export default class Slot {
       });
     }
 
-    // Verticali
+    // Vertical
     for (let column = 0; column < 5; column++) {
       const coordinates = [];
 
@@ -395,7 +451,7 @@ export default class Slot {
       });
     }
 
-    // Diagonali discendenti
+    // Descending diagonals
     for (let startColumn = 0; startColumn < 5; startColumn++) {
       const coordinates = [];
 
@@ -417,7 +473,7 @@ export default class Slot {
       }
     }
 
-    // Diagonali ascendenti
+    // Ascending diagonals
     for (let startColumn = 0; startColumn < 5; startColumn++) {
       const coordinates = [];
 
@@ -444,7 +500,7 @@ export default class Slot {
 
   /*
    * ============================================================
-   * GRIGLIA
+   * GRID
    * ============================================================
    */
 
@@ -474,7 +530,7 @@ export default class Slot {
 
   /*
    * ============================================================
-   * COSTRUZIONE DEGLI EVENTI
+   * EVENT BUILDERS
    * ============================================================
    */
 
@@ -529,7 +585,13 @@ export default class Slot {
   }
 
   createFamilyEvent(grid, event) {
-    const length = this.randomInteger(3, 5);
+    /*
+     * The length is no longer random: each family event has a
+     * fixed length (3, 4 or 5) and therefore a known score, so
+     * each of the three variants can be tuned separately.
+     */
+
+    const length = event.length;
 
     const symbols = this.shuffle(event.allowed).slice(0, length - 1);
 
@@ -552,9 +614,18 @@ export default class Slot {
   }
 
   createPair69Event(grid, event) {
-    const line = this.getLines().find(
+    /*
+     * This combination fills a whole 5-cell row. The only lines
+     * that long are the three horizontal rows: collect them all
+     * and pick one at random, otherwise the win would always land
+     * on the same row.
+     */
+
+    const validLines = this.getLines().filter(
       (candidate) => candidate.coordinates.length === 5,
     );
+
+    const line = validLines[Math.floor(Math.random() * validLines.length)];
 
     const coordinates = line.coordinates;
 
@@ -572,17 +643,9 @@ export default class Slot {
     this.setLineSymbols(grid, coordinates, this.shuffle(symbols));
   }
 
-  create666Event(grid, event) {
-    const line = this.getLines().find(
-      (candidate) => candidate.coordinates.length === 5,
-    );
-
-    this.setLineSymbols(grid, line.coordinates, this.shuffle(event.symbols));
-  }
-
   /*
    * ============================================================
-   * GENERAZIONE DI UN GIRO VINCENTE
+   * BUILDING A WINNING SPIN
    * ============================================================
    */
 
@@ -616,24 +679,15 @@ export default class Slot {
 
   generateWinningSpin(event) {
     /*
-     * Costruiamo più volte il giro e teniamo soltanto una
-     * configurazione il cui punteggio corrisponde esattamente
-     * all'evento desiderato.
+     * Build the spin repeatedly and keep only a layout whose
+     * score matches the requested event exactly.
      */
 
     for (let attempt = 0; attempt < 5000; attempt++) {
       const candidate = this.createWinningCandidate(event);
       const score = Score.calculate(candidate);
 
-      if (event.score !== null && score === event.score) {
-        return candidate;
-      }
-
-      if (event.name === "z18-family" && [10, 20, 30].includes(score)) {
-        return candidate;
-      }
-
-      if (event.name === "z17-family" && [10, 20, 30].includes(score)) {
+      if (score === event.score) {
         return candidate;
       }
     }
@@ -643,18 +697,18 @@ export default class Slot {
 
   /*
    * ============================================================
-   * SCELTA DELL'EVENTO
+   * PICKING AN EVENT
    * ============================================================
    *
-   * Ogni evento ha una probabilità equivalente a:
+   * Each event has a probability of:
    *
    *     1 / N
    *
-   * dove N viene estratto casualmente fra il minimo e il massimo
-   * indicati nella tabella.
+   * where N is drawn at random between the min and max listed in
+   * the event table.
    *
-   * Questo significa che una combinazione può uscire anche molto
-   * prima dell'intervallo nominale.
+   * This means a combination can show up well before its nominal
+   * interval.
    */
 
   chooseWinningEvent() {
@@ -719,9 +773,8 @@ export default class Slot {
     }
 
     /*
-     * Se per qualche ragione non riusciamo a costruire
-     * esattamente l'evento desiderato, torniamo alla generazione
-     * casuale normale.
+     * If for any reason the requested event cannot be built,
+     * fall back to a plain random spin.
      */
 
     return Array.from({ length: 5 }, () => {
@@ -769,16 +822,15 @@ export default class Slot {
 
   /*
    * ============================================================
-   * LINEE LED "AL NEON" SULLE COMBINAZIONI VINCENTI
+   * NEON WIN LINES
    * ============================================================
    *
-   * Ogni combinazione vincente in questo gioco è sempre un tratto
-   * contiguo di una linea retta (orizzontale, verticale o
-   * diagonale) già definita altrove: basta quindi collegare la
-   * prima e l'ultima cella dell'array coordinates di ciascun win
-   * per ottenere il segmento corretto. L'overlay SVG (#win-lines)
-   * usa un viewBox "0 0 5 3", quindi il centro della cella
-   * (column, row) è semplicemente (column + 0.5, row + 0.5).
+   * Every winning combination in this game is a contiguous run
+   * along a straight line (horizontal, vertical or diagonal)
+   * defined elsewhere, so connecting the first and last cell of
+   * each win's coordinates array gives the right segment. The SVG
+   * overlay (#win-lines) uses a "0 0 5 3" viewBox, so the centre
+   * of cell (column, row) is simply (column + 0.5, row + 0.5).
    */
 
   clearWinningLines() {
