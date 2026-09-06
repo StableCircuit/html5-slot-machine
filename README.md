@@ -30,28 +30,30 @@ If you have landed here without that context, nothing is missing on your end. Th
 
 The following are the main modifications and additions made in this fork:
 
-* Complete visual redesign of the layout, panels, controls, and overall presentation.
-* Custom **Ancient Gold** visual theme and page styling.
-* Custom page backgrounds, including a dedicated variant for narrow screens.
-* Replacement of the original slot symbols with **40 custom PNG symbols**.
-* Custom symbol selection logic across all 40 symbols.
-* Duplicate-symbol prevention within the three visible cells of a reel.
-* Complete scoring engine added in `src/js/Score.js`.
-* Support for multiple categories of winning combinations, including:
+- Complete visual redesign of the layout, panels, controls, and overall presentation.
+- Custom **Ancient Gold** visual theme and page styling.
+- Custom page backgrounds, including a dedicated variant for narrow screens.
+- Replacement of the original slot symbols with **40 custom PNG symbols**.
+- Custom symbol selection logic across all 40 symbols.
+- Duplicate-symbol prevention within the three visible cells of a reel.
+- Complete scoring engine added in `src/js/Score.js`.
+- Support for multiple categories of winning combinations, including:
 
-  * runs of identical symbols;
-  * two-symbol groups;
-  * exact three-symbol combinations;
-  * two-symbol full-row combinations;
-  * a five-symbol jackpot row.
-* Probability handling designed around the payout value of each combination.
-* Animated **neon LED win lines** rendered as an SVG overlay after each spin.
-* Win lines are colour-coded according to the value of the win.
-* New score display and supporting UI.
-* New paytable and donation panels.
-* Autoplay functionality and custom-styled controls.
-* Removal of the original jackpot display.
-* Additional modifications to reel, symbol, slot and game-flow behaviour.
+  - runs of identical symbols;
+  - two-symbol groups;
+  - exact three-symbol combinations;
+  - two-symbol full-row combinations;
+  - a five-symbol jackpot row.
+
+- Probability handling designed around the payout value of each combination.
+- Animated **neon LED win lines** rendered as an SVG overlay after each spin.
+- Win lines are colour-coded according to the value of the win.
+- New score display and supporting UI.
+- New paytable and donation panels.
+- Interactive in-browser Paytable page (`paytable.html`), rendering a 3-page PDF reference directly on the page (no download, no external viewer) via a self-hosted PDF.js build.
+- Autoplay functionality and custom-styled controls.
+- Removal of the original jackpot display.
+- Additional modifications to reel, symbol, slot and game-flow behaviour.
 
 The original project remains credited below, and this repository intentionally remains a fork of the original work.
 
@@ -59,24 +61,26 @@ The original project remains credited below, and this repository intentionally r
 
 ## Features
 
-* **Five reels** with three visible rows.
-* **14 winning lines**:
+- **Five reels** with three visible rows.
+- **14 winning lines**:
 
-  * 3 horizontal rows;
-  * 5 vertical columns;
-  * 6 diagonals.
-* **40 custom PNG symbols** (`z1.png` to `z40.png`).
-* Custom scoring engine.
-* Multiple types of winning combinations.
-* Probability system that controls the frequency of combinations according to their payout value.
-* Animated neon LED win lines using an SVG overlay.
-* Win-line colours based on the value of the win.
-* Paytable and score panels.
-* Donation box.
-* Autoplay toggle.
-* Custom control bar.
-* Responsive page background with a dedicated narrow-screen variant.
-* No real-money gambling or wagering functionality.
+  - 3 horizontal rows;
+  - 5 vertical columns;
+  - 6 diagonals.
+
+- **40 custom PNG symbols** (`z1.png` to `z40.png`).
+- Custom scoring engine.
+- Multiple types of winning combinations.
+- Probability system that controls the frequency of combinations according to their payout value.
+- Animated neon LED win lines using an SVG overlay.
+- Win-line colours based on the value of the win.
+- Paytable and score panels.
+- Dedicated Paytable page with an embedded, self-hosted PDF.js viewer — read online, never downloaded.
+- Donation box.
+- Autoplay toggle.
+- Custom control bar.
+- Responsive page background with a dedicated narrow-screen variant.
+- No real-money gambling or wagering functionality.
 
 ---
 
@@ -147,6 +151,18 @@ The custom scoring engine is implemented in:
 ```text
 src/js/Score.js
 ```
+
+### Paytable
+
+The in-browser Paytable page is made up of three parts:
+
+```text
+src/paytable.html   — page shell, linked from the "Check the Paytable!" button
+src/js/paytable.js  — renders the PDF pages as canvases via pdfjs-dist
+src/assets/paytable.pdf — the 3-page paytable reference document
+```
+
+The PDF is rendered with a self-hosted build of **PDF.js** (`pdfjs-dist`), bundled by webpack together with its worker file — no external CDN, no native browser PDF toolbar, and no download prompt. The `pdfjs-dist` version is pinned to an exact version in `package.json` (no `^` range) because newer releases have introduced breaking changes to the rendering API.
 
 ---
 
